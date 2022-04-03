@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react'
-import { data } from '../index'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addTodo, deleteTodo } from '../redux/actions'
 import { useSelector } from 'react-redux'
+import { addTodo, deleteTodo, getAllTodos } from '../redux/redux-toolkit/todoSlice'
 
 const Header = (props) => {
 
@@ -12,7 +11,10 @@ const Header = (props) => {
 
   const dispatch = useDispatch()
   
-  console.log(todoList);
+  useEffect(() => {
+    dispatch(getAllTodos())
+  }, [dispatch])
+  
   
   const handleSubmit = () => {
     dispatch(addTodo(value))
@@ -23,6 +25,8 @@ const Header = (props) => {
     dispatch(deleteTodo(todo))
   }
 
+  console.log(todoList.map(item => item.title));
+
 
   return (
     <div>
@@ -32,7 +36,7 @@ const Header = (props) => {
         <button onClick={handleSubmit} style={{marginLeft: 20}}>Add todo</button>
       </div>
       {
-        todoList.length > 0 && (
+        todoList && (
           todoList.map(item => (
             <ul key={item}>
               <li>{item}</li>
